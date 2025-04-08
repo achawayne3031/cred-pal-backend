@@ -34,7 +34,7 @@ export class AuthService {
     this.accountService.create({ userId: user.id, balance: 0 });
 
     /// Generate Token /////
-    let accessToken = this.generateToken(user);
+    let accessToken = await this.generateToken(user);
 
     return { user, token: accessToken };
   }
@@ -55,7 +55,7 @@ export class AuthService {
 
     //// Check if user has an account /////
     let account = await this.accountService.find(user.id);
-    if (account.length == 0) {
+    if (account !== null) {
       //// Create account /////
       this.accountService.create({ userId: user.id, balance: 0 });
     }

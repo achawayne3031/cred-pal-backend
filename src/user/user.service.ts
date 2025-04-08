@@ -6,10 +6,21 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IRegister } from 'src/interface/IRegister';
 import { ILogin } from 'src/interface/ILogin';
+import { AccountsService } from 'src/accounts/accounts.service';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private repo: Repository<User>,
+    private accountService: AccountsService,
+  ) {}
+
+  async profile(currentUser: User) {
+    return {
+      user: currentUser,
+      account: await this.accountService.find(currentUser.id),
+    };
+  }
 
   create(payload: IRegister) {
     const user = this.repo.create({
@@ -22,11 +33,11 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.repo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: number): Promise<User> {
+    return this.repo.findOneBy({ id });
   }
 
   find(email: string): Promise<User[]> {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { AuthController } from 'src/auth/auth.controller';
@@ -10,6 +10,7 @@ import { Account } from 'src/accounts/entities/account.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 
 import * as dotenv from 'dotenv';
+import { CurrentUserMiddleware } from 'src/middlewares/current-user.middleware';
 
 dotenv.config();
 
@@ -18,4 +19,8 @@ dotenv.config();
   controllers: [UserController, AuthController],
   providers: [UserService, AuthService, AccountsService, JwtService],
 })
-export class UserModule {}
+export class UserModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CurrentUserMiddleware).forRoutes(UserController);
+  }
+}

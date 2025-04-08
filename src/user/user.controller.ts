@@ -10,15 +10,16 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CurrentUser } from 'src/decorators/current-user.decorator';
 
-@Controller('user')
+@Controller('/api/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @Post()
-  // create(@Body() createUserDto: CreateUserDto) {
-  //   return this.userService.create(createUserDto);
-  // }
+  @Get('/profile')
+  profile(@CurrentUser() currentUser) {
+    return this.userService.profile(currentUser);
+  }
 
   @Get()
   findAll() {

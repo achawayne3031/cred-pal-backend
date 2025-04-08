@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Transaction {
@@ -15,8 +16,13 @@ export class Transaction {
   timestamp: Date;
 
   @Column({ nullable: true })
+  @ManyToOne(() => User, { nullable: true })
   senderId: number;
 
   @Column({ nullable: true })
+  @ManyToOne(() => User, { nullable: true })
   receiverId: number;
+
+  @Column({ default: 0 })
+  status: number;
 }
