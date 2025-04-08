@@ -7,22 +7,21 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-
-// import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from './../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dt';
 
 @Controller('/api/auth')
 export class AuthController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/register')
   register(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.authService.register(createUserDto);
+  }
+
+  @Post('/login')
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto);
   }
 }

@@ -5,10 +5,17 @@ import { AuthController } from 'src/auth/auth.controller';
 import { AuthService } from 'src/auth/auth.service';
 import { User } from './entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AccountsService } from 'src/accounts/accounts.service';
+import { Account } from 'src/accounts/entities/account.entity';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, Account])],
   controllers: [UserController, AuthController],
-  providers: [UserService, AuthService],
+  providers: [UserService, AuthService, AccountsService, JwtService],
 })
 export class UserModule {}

@@ -1,3 +1,4 @@
+import { Transaction } from 'src/transactions/entities/transaction.entity';
 import {
   Entity,
   Column,
@@ -30,6 +31,6 @@ export class User {
   @UpdateDateColumn()
   updated_at!: Date;
 
-  //   @OneToMany(() => Report, (report) => report.user)
-  //   reports: Report[];
+  // @OneToMany(() => Transaction, (transaction) => transaction.user)
+  // transactions: Transaction[];
 }

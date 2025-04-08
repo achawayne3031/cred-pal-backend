@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IRegister } from 'src/interface/IRegister';
+import { ILogin } from 'src/interface/ILogin';
 
 @Injectable()
 export class UserService {
