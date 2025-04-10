@@ -28,7 +28,7 @@ export class TransactionsService {
   ) {}
 
   async userTransaction(currentPage: number = 1, currentUser: User) {
-    let perPage = 5;
+    let perPage = 10;
     let skipItem = perPage * currentPage - perPage;
     let total = await this.transactionRepo
       .createQueryBuilder('transaction')
