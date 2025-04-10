@@ -42,7 +42,7 @@ export class TransactionsService {
       .leftJoinAndSelect('transaction.senderId', 'senderId')
       .leftJoinAndSelect('transaction.receiverId', 'receiverId')
       .where('senderId = :senderId', { senderId: currentUser.id })
-      .andWhere('receiverId = :receiverId', { receiverId: currentUser.id })
+      .orWhere('receiverId = :receiverId', { receiverId: currentUser.id })
       .skip(skipItem)
       .take(perPage)
       .orderBy('transaction.id', 'DESC')
