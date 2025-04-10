@@ -25,4 +25,7 @@ export class Transaction {
 
   @Column({ default: 0 })
   status: number;
+
+  @Column({ nullable: true })
+  note: string;
 }

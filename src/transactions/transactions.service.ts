@@ -17,6 +17,7 @@ import { AccountsService } from 'src/accounts/accounts.service';
 import { SaveTransactionDto } from './dto/save-transaction.dto';
 import { IWithdrawal } from 'src/interface/IWithdrawal';
 import { ITransfer } from 'src/interface/ITransfer';
+import { ITransferEmail } from 'src/interface/ITransferEmail';
 
 @Injectable()
 export class TransactionsService {
@@ -140,6 +141,49 @@ export class TransactionsService {
       senderId: currentUser.id,
       receiverId: payload.receiverId,
       status: 1,
+    });
+
+    return this.transactionRepo.save(transactionD);
+  }
+
+  async transferEmail(payload: ITransferEmail, currentUser: User) {
+    let receiverData = await this.userService.find(payload.email);
+
+    console.log(receiverData, 'test');
+
+    if (receiverData.length == 0) {
+      throw new NotFoundException('receiver user not found');
+    }
+
+    let senderAccountData = await this.accountService.find(currentUser.id);
+    let receiverAccountData = await this.accountService.find(
+      receiverData[0].id,
+    );
+
+    if (payload.amount > senderAccountData.balance) {
+      throw new BadRequestException('Insufficient balance.');
+    }
+
+    let newSenderAmount = senderAccountData.balance - payload.amount;
+    let newReceiverAmount = receiverAccountData.balance + payload.amount;
+
+    this.accountService.deposit({
+      userId: senderAccountData.userId,
+      balance: newSenderAmount,
+    });
+    this.accountService.deposit({
+      userId: receiverAccountData.userId,
+      balance: newReceiverAmount,
+    });
+
+    const transactionD = this.transactionRepo.create({
+      amount: payload.amount,
+      type: 'transfer',
+      timestamp: new Date(),
+      senderId: currentUser.id,
+      receiverId: receiverData[0].id,
+      status: 1,
+      note: payload.note,
     });
 
     return this.transactionRepo.save(transactionD);

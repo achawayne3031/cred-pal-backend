@@ -17,6 +17,7 @@ import { AuthGuard } from 'src/guard/auth/auth.guard';
 import { WithdrawalTransactionDto } from './dto/withdrawal-transaction.dto';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import { TransferTransactionDto } from './dto/transfer-transaction.dto';
+import { TransferEmailTransactionDto } from './dto/transfer-email-transaction.dto';
 
 @Controller('/api/transactions')
 export class TransactionsController {
@@ -55,6 +56,15 @@ export class TransactionsController {
     @CurrentUser() currentUser,
   ) {
     return this.transactionsService.transfer(body, currentUser);
+  }
+
+  @Post('/transfer-email')
+  @HttpCode(200)
+  async transferEmail(
+    @Body() body: TransferEmailTransactionDto,
+    @CurrentUser() currentUser,
+  ) {
+    return this.transactionsService.transferEmail(body, currentUser);
   }
 
   @Post()
