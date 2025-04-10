@@ -1,4 +1,5 @@
-import { IsCurrency, IsEmail, IsNumber } from 'class-validator';
+import { IsCurrency, IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsNull } from 'typeorm';
 
 export class TransferEmailTransactionDto {
   @IsEmail()
@@ -7,5 +8,6 @@ export class TransferEmailTransactionDto {
   @IsNumber()
   amount: number;
 
+  @IsString()
   note: string;
 }

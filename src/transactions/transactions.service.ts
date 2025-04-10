@@ -45,7 +45,7 @@ export class TransactionsService {
       .andWhere('receiverId = :receiverId', { receiverId: currentUser.id })
       .skip(skipItem)
       .take(perPage)
-      .orderBy('transaction.timestamp', 'DESC')
+      .orderBy('transaction.id', 'DESC')
       .getMany();
 
     return {
@@ -149,8 +149,6 @@ export class TransactionsService {
   async transferEmail(payload: ITransferEmail, currentUser: User) {
     let receiverData = await this.userService.find(payload.email);
 
-    console.log(receiverData, 'test');
-
     if (receiverData.length == 0) {
       throw new NotFoundException('receiver user not found');
     }
@@ -175,6 +173,8 @@ export class TransactionsService {
       userId: receiverAccountData.userId,
       balance: newReceiverAmount,
     });
+
+    console.log(payload);
 
     const transactionD = this.transactionRepo.create({
       amount: payload.amount,
